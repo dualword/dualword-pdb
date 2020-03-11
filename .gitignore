@@ -1,0 +1,10 @@
+/src/.build/
+/src/dualword-pdb
+/Makefile
+/src/Makefile
+
+#eclipse
+/.cproject
+/.project
+/.externalToolBuilders
+/.settings
