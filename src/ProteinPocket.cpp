@@ -14,30 +14,25 @@
  *
 */
 
-#ifndef DUALWORDPDB_H_
-#define DUALWORDPDB_H_
+#include "ProteinPocket.h"
 
-#define _DUALWORD "Dualword-pdb"
+#include "lcs.h"
 
-#include <QApplication>
-#include <QScopedPointer>
+ProteinPocket::ProteinPocket(const QString& name, QObject *p) : QThread(p) {
+	this->name = name;
 
-class MainWindow;
+}
 
-class DualwordPdb : public QApplication {
-    Q_OBJECT
+ProteinPocket::~ProteinPocket() {
 
-public:
-	DualwordPdb(int &argc, char **argv);
-	virtual ~DualwordPdb();
+}
 
-public Q_SLOTS:
-	void start();
+void ProteinPocket::run() {
+	try{
+		lcs o;
+		o.runLigsite(name.toStdString());
+		emit showPocket(o.buf);
+	} catch (...) {
 
-private:
-	QScopedPointer<MainWindow> win;
-
-};
-
-
-#endif /* DUALWORDPDB_H_ */
+	}
+}

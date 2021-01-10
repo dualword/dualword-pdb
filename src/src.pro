@@ -1,20 +1,23 @@
 include("version.pri")
+include("../3rdparty/ligsitecsc/ligsitecsc.pri")
 
 TARGET = dualword-pdb
 TEMPLATE = app
 CONFIG += qt thread console release
 QT += opengl
 
-DEPENDPATH += .
-INCLUDEPATH += .
+DEPENDPATH += . ../3rdparty/ligsitecsc
+INCLUDEPATH += . ../3rdparty/ligsitecsc
 
-HEADERS = \
+HEADERS += \
 	MainWindow.h \
-	DualwordPdb.h
+	DualwordPdb.h \
+	ProteinPocket.h
 		
-SOURCES = \
+SOURCES += \
 	MainWindow.cpp \
 	DualwordPdb.cpp \
+	ProteinPocket.cpp \
 	main.cpp
 
 FORMS += \

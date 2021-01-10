@@ -1,4 +1,4 @@
-/*
+/*  Dualword-pdb http://github.com/dualword/dualword-pdb License:GNU GPL
  *	Dualword-pdb is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
@@ -15,6 +15,8 @@
 */
 
 #include "MainWindow.h"
+#include "ProteinPocket.h"
+
 #include <chemkit/polymerfile.h>
 #include <chemkit/graphicsview.h>
 #include <chemkit/graphicsproteinitem.h>
@@ -41,8 +43,11 @@ MainWindow::MainWindow(QWidget *p, Qt::WindowFlags f) : QMainWindow(p, f){
     connect(actionAbout,SIGNAL(triggered()), SLOT(showAbout()));
     connect(sliderOpacity, SIGNAL(valueChanged(int)), SLOT(opacityChanged(int)));
     connect(checkMode, SIGNAL(stateChanged(int)), SLOT(modeChanged(int)));
-    surfaceItem.reset(new chemkit::GraphicsPymolSurfaceItem());
-    view->addItem(surfaceItem.data());
+    item.reset(new chemkit::GraphicsPymolSurfaceItem());
+    view->addItem(item.data());
+    item2.reset(new chemkit::GraphicsPymolSurfaceItem());
+    view->addItem(item2.data());
+
 }
 
 MainWindow::~MainWindow() {}
@@ -61,32 +66,42 @@ void MainWindow::openPdb(){
 			".", "PDB File (*.pdb);;All Files (*.*)");
 	if(f.isEmpty()) return;
     pFile.reset(new chemkit::PolymerFile);
-
     QByteArray format = QFileInfo(f).suffix().toAscii();
     bool ok = pFile->read(f.toAscii().constData(), format.constData());
     if(!ok){
         QMessageBox::critical(this, "Error:", pFile->errorString().c_str());
         return;
     }
-
 	const boost::shared_ptr<chemkit::Polymer> &polymer = pFile->polymer();
-	surfaceItem->setMolecule(polymer.get());
+	item->setMolecule(polymer.get());
 	view->camera()->lookAt(polymer->center().cast<float>());
 	view->update();
+    pocket.reset(new ProteinPocket(f));
+    connect(pocket.data(), SIGNAL(showPocket(const QString&)), SLOT(showPocket(const QString&)));
+    pocket->start();
+
 }
 
 void MainWindow::opacityChanged(int value){
     float opacity = value / 100.0;
-	surfaceItem->setOpacity(opacity);
+    item->setOpacity(opacity);
     view->update();
 }
 
 void MainWindow::modeChanged (int i){
 	if(Qt::Unchecked == i){
-		surfaceItem->setColorMode(chemkit::GraphicsPymolSurfaceItem::AtomColor);
+		item->setColorMode(chemkit::GraphicsPymolSurfaceItem::AtomColor);
 	}else if((Qt::Checked == i)){
-		surfaceItem->setColorMode(chemkit::GraphicsPymolSurfaceItem::SolidColor);
-		surfaceItem->setColor(QColor("green"));
+		item->setColorMode(chemkit::GraphicsPymolSurfaceItem::SolidColor);
+		item->setColor(QColor("green"));
 	}
     view->update();
+}
+
+void MainWindow::showPocket(const QString& buf) {
+	std::istringstream is(buf.toStdString());
+    pFile.reset(new chemkit::PolymerFile);
+    pFile->read(is, "pdb");
+    const boost::shared_ptr<chemkit::Polymer> &p = pFile->polymer();
+    item2->setMolecule(p.get());
 }

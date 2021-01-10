@@ -14,30 +14,29 @@
  *
 */
 
-#ifndef DUALWORDPDB_H_
-#define DUALWORDPDB_H_
+#ifndef SRC_PROTEINPOCKET_H_
+#define SRC_PROTEINPOCKET_H_
 
-#define _DUALWORD "Dualword-pdb"
+#include <QtCore>
 
-#include <QApplication>
-#include <QScopedPointer>
-
-class MainWindow;
-
-class DualwordPdb : public QApplication {
-    Q_OBJECT
+class ProteinPocket : public QThread {
+	Q_OBJECT
 
 public:
-	DualwordPdb(int &argc, char **argv);
-	virtual ~DualwordPdb();
+	ProteinPocket(const QString&, QObject *p = 0);
+	virtual ~ProteinPocket();
 
-public Q_SLOTS:
-	void start();
+signals:
+	void showPocket(const QString&);
+
+protected:
+     void run();
 
 private:
-	QScopedPointer<MainWindow> win;
+     QString name;
+
+
 
 };
 
-
-#endif /* DUALWORDPDB_H_ */
+#endif /* SRC_PROTEINPOCKET_H_ */

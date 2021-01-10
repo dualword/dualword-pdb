@@ -1,4 +1,4 @@
-/*
+/*  Dualword-pdb http://github.com/dualword/dualword-pdb License:GNU GPL
  *	Dualword-pdb is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
@@ -26,6 +26,7 @@ class GraphicsPymolSurfaceItem;
 class GraphicsProteinItem;
 class GraphicsNucleicAcidItem;
 }
+class ProteinPocket;
 
 class MainWindow : public QMainWindow, private Ui::MainWindowForm {
   Q_OBJECT
@@ -39,11 +40,12 @@ public slots:
 	void openPdb();
 	void opacityChanged(int);
 	void modeChanged (int);
+	void showPocket(const QString&);
 
 private:
     QScopedPointer<chemkit::PolymerFile> pFile;
-    QScopedPointer<chemkit::GraphicsPymolSurfaceItem> surfaceItem;
-
+    QScopedPointer<chemkit::GraphicsPymolSurfaceItem> item, item2;
+	QScopedPointer<ProteinPocket> pocket;
 };
 
 #endif /* MAINWINDOW_H_ */
