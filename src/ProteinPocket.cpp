@@ -1,4 +1,4 @@
-/*  Dualword-pdb http://github.com/dualword/dualword-pdb License:GNU GPL
+/*  Dualword-pdb http://github.com/dualword/dualword-pdb
  *	Dualword-pdb is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
@@ -14,12 +14,14 @@
  *
 */
 
+#include "global.h"
 #include "ProteinPocket.h"
+#include "ProteinVolume.h"
 
 #include "lcs.h"
 
-ProteinPocket::ProteinPocket(const QString& name, QObject *p) : QThread(p) {
-	this->name = name;
+ProteinPocket::ProteinPocket(const QString& f, const QString& t, QObject *p) :
+	QThread(), fname(f), txt(t)  {
 
 }
 
@@ -29,10 +31,40 @@ ProteinPocket::~ProteinPocket() {
 
 void ProteinPocket::run() {
 	try{
-		lcs o;
-		o.runLigsite(name.toStdString());
-		emit showPocket(o.buf);
-	} catch (...) {
+		Pdb pdb;
+		QTemporaryFile file;
+		if(txt.length() > 0){
+			if (file.open()) {
+				file.write(txt.toUtf8());
+			}
+			pdb.setPdb(txt);
+			pdb.setName(fname.toUpper());
+			fname = file.fileName();
 
+			QFile f(file.fileName());
+			f.open(QIODevice::ReadOnly | QIODevice::Text);
+			qDebug() << f.readAll();
+			file.close();
+
+		}else{
+		    QFile file(fname);
+		    file.open(QIODevice::ReadOnly | QIODevice::Text);
+		    pdb.setPdb(file.readAll());
+		    file.close();
+		    pdb.setName(fname.mid(fname.lastIndexOf("/")+1,
+		    		(fname.lastIndexOf(".") - fname.lastIndexOf("/"))-1).toUpper());
+		}
+
+		lcs o;
+		o.runLigsite(fname.toStdString());
+		pdb.setPocket(o.buf);
+
+		ProteinVolume vol;
+		vol.calculate(fname, &pdb);
+
+		mainDb->savePdb(pdb);
+		emit newPdb(pdb.getName());
+	}catch (...) {
+		//
 	}
 }

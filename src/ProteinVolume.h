@@ -14,36 +14,22 @@
  *
 */
 
-#ifndef DUALWORDPDB_H_
-#define DUALWORDPDB_H_
+#ifndef SRC_PROTEINVOLUME_H_
+#define SRC_PROTEINVOLUME_H_
 
-#define _DUALWORD "Dualword-pdb"
+#include <QString>
 
-#include <QApplication>
-#include <QScopedPointer>
+class Pdb;
 
-class MainWindow;
-class Db;
-
-class DualwordPdb : public QApplication {
-    Q_OBJECT
-
+class ProteinVolume {
 public:
-	DualwordPdb(int &argc, char **argv);
-	virtual ~DualwordPdb();
-	static DualwordPdb *instance() {return (static_cast<DualwordPdb *>(QCoreApplication::instance()));};
-	Db* getDb() {return db;};
-	MainWindow* win() {return w.data();};
-
-public slots:
-	void start();
-	void log(const QString&);
+	ProteinVolume();
+	virtual ~ProteinVolume();
+	void calculate(const QString&, Pdb*);
 
 private:
-	QScopedPointer<MainWindow> w;
-	Db* db;
+	double weight=0.0;
 
 };
 
-
-#endif /* DUALWORDPDB_H_ */
+#endif /* SRC_PROTEINVOLUME_H_ */

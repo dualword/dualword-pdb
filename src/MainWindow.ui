@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>378</height>
+    <width>695</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,8 +27,14 @@
     </sizepolicy>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="margin">
+     <number>1</number>
+    </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,3,1">
+      <property name="spacing">
+       <number>1</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -52,6 +58,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="checkPocket">
+          <property name="text">
+           <string>Pockets</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -67,10 +80,13 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,7,3">
         <property name="sizeConstraint">
          <enum>QLayout::SetMaximumSize</enum>
         </property>
+        <item>
+         <widget class="QListWidget" name="listId"/>
+        </item>
         <item>
          <widget class="chemkit::GraphicsView" name="view" native="true">
           <property name="sizePolicy">
@@ -81,7 +97,38 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QTableWidget" name="tbl">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="columnCount">
+           <number>2</number>
+          </property>
+          <column/>
+          <column/>
+         </widget>
+        </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="console">
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="maximumBlockCount">
+         <number>1000</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -92,7 +139,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>521</width>
+     <width>695</width>
      <height>29</height>
     </rect>
    </property>
@@ -115,6 +162,18 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenPdb"/>
+   <addaction name="actionGetPdb"/>
+   <addaction name="separator"/>
+   <addaction name="actionConsole"/>
+   <addaction name="actionDelete"/>
+   <addaction name="separator"/>
+   <addaction name="actionFirst"/>
+   <addaction name="actionBack"/>
+   <addaction name="actionNext"/>
+   <addaction name="actionLast"/>
+   <addaction name="separator"/>
+   <addaction name="actionShowPDB"/>
+   <addaction name="separator"/>
    <addaction name="actionAbout"/>
   </widget>
   <action name="actionOpenPdb">
@@ -128,6 +187,76 @@
   <action name="actionAbout">
    <property name="text">
     <string>actionAbout</string>
+   </property>
+   <property name="toolTip">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionGetPdb">
+   <property name="text">
+    <string>getPdb</string>
+   </property>
+   <property name="toolTip">
+    <string>Download from PDB</string>
+   </property>
+  </action>
+  <action name="actionConsole">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>showConsole</string>
+   </property>
+   <property name="toolTip">
+    <string>Show console</string>
+   </property>
+  </action>
+  <action name="actionFirst">
+   <property name="text">
+    <string>First</string>
+   </property>
+   <property name="toolTip">
+    <string>First</string>
+   </property>
+  </action>
+  <action name="actionBack">
+   <property name="text">
+    <string>Back</string>
+   </property>
+   <property name="toolTip">
+    <string>Back</string>
+   </property>
+  </action>
+  <action name="actionNext">
+   <property name="text">
+    <string>Next</string>
+   </property>
+   <property name="toolTip">
+    <string>Next</string>
+   </property>
+  </action>
+  <action name="actionLast">
+   <property name="text">
+    <string>Last</string>
+   </property>
+   <property name="toolTip">
+    <string>Last</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete All</string>
+   </property>
+  </action>
+  <action name="actionShowPDB">
+   <property name="text">
+    <string>T</string>
+   </property>
+   <property name="toolTip">
+    <string>Show text</string>
    </property>
   </action>
  </widget>

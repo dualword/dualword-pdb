@@ -14,36 +14,38 @@
  *
 */
 
-#ifndef DUALWORDPDB_H_
-#define DUALWORDPDB_H_
+#ifndef SRC_DB_H_
+#define SRC_DB_H_
 
-#define _DUALWORD "Dualword-pdb"
+#include "global.h"
 
-#include <QApplication>
-#include <QScopedPointer>
+class Pdb;
 
-class MainWindow;
-class Db;
-
-class DualwordPdb : public QApplication {
-    Q_OBJECT
+class Db : public QObject {
+Q_OBJECT
 
 public:
-	DualwordPdb(int &argc, char **argv);
-	virtual ~DualwordPdb();
-	static DualwordPdb *instance() {return (static_cast<DualwordPdb *>(QCoreApplication::instance()));};
-	Db* getDb() {return db;};
-	MainWindow* win() {return w.data();};
+	Db(QObject *p = 0);
+	virtual ~Db();
+
+signals:
+	void newPdb(const Pdb&);
 
 public slots:
-	void start();
-	void log(const QString&);
+	void back();
+	void next();
+	void first();
+	void last();
+	int size() {return list.size();};
+	void deleteAll();
+	void save(const QString&);
+	void savePdb(Pdb&);
+	Pdb* pdb() {return &list[idx];};
 
 private:
-	QScopedPointer<MainWindow> w;
-	Db* db;
+	int idx;
+	QList<Pdb> list;
 
 };
 
-
-#endif /* DUALWORDPDB_H_ */
+#endif /* SRC_DB_H_ */

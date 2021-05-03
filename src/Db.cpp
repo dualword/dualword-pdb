@@ -14,31 +14,58 @@
  *
 */
 
-#include "global.h"
+#include "Db.h"
 
-#include <QDateTime>
+Db::Db(QObject* p) : QObject(p) {
 
-DualwordPdb::DualwordPdb(int &argc, char **argv) : QApplication(argc, argv), db(nullptr) {
-	QCoreApplication::setApplicationName(QString(_DUALWORD));
-
-	#ifdef _VER
-		QApplication::setApplicationVersion(_VER);
-	#endif
-
-	QApplication::setQuitOnLastWindowClosed(true);
-	db = new Db(this);
-}
-
-DualwordPdb::~DualwordPdb() {
 
 }
 
-void DualwordPdb::start() {
-	w.reset(new MainWindow());
-    w->show();
-    mainApp->log(QDateTime::currentDateTime().toString());
+Db::~Db() {
+
 }
 
-void DualwordPdb::log(const QString& str){
-	mainWin->con()->appendPlainText(str);
+void Db::back(){
+	if(list.size() == 0) return;
+	if(--idx<0) idx = 0;
+	emit newPdb(list[idx]);
 }
+
+void Db::next(){
+	if(list.size() == 0) return;
+	if(++idx>list.size()-1) idx = list.size()-1;
+	emit newPdb(list[idx]);
+}
+
+void Db::first(){
+	if(list.size() == 0) return;
+	idx = 0;
+	emit newPdb(list[idx]);
+}
+
+void Db::last(){
+	if(list.size() == 0) return;
+	idx = list.size()-1;
+	emit newPdb(list[idx]);
+}
+
+void Db::deleteAll(){
+	list.clear();
+	idx = 0;
+//	deleteMol();
+}
+
+void Db::save(const QString& str){
+	list.append(Pdb(str));
+	//list.push_back(m);
+	last();
+}
+
+void Db::savePdb(Pdb& pdb){
+	//list.append(pdb);
+	list.push_back(pdb);
+	if(list.size() == 1) last();
+}
+
+
+

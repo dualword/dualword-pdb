@@ -13,37 +13,29 @@
  *	along with Dualword-pdb. If not, see <http://www.gnu.org/licenses/>.
  *
 */
+#ifndef SRC_LOADERPDB_H_
+#define SRC_LOADERPDB_H_
 
-#ifndef DUALWORDPDB_H_
-#define DUALWORDPDB_H_
+#include <QtGui>
 
-#define _DUALWORD "Dualword-pdb"
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
-#include <QApplication>
-#include <QScopedPointer>
-
-class MainWindow;
-class Db;
-
-class DualwordPdb : public QApplication {
-    Q_OBJECT
+class LoaderPDB : public QInputDialog {
+	Q_OBJECT
 
 public:
-	DualwordPdb(int &argc, char **argv);
-	virtual ~DualwordPdb();
-	static DualwordPdb *instance() {return (static_cast<DualwordPdb *>(QCoreApplication::instance()));};
-	Db* getDb() {return db;};
-	MainWindow* win() {return w.data();};
+	LoaderPDB(QWidget * p = 0, Qt::WindowFlags f = 0 );
+	virtual ~LoaderPDB();
+	virtual void done (int);
 
 public slots:
-	void start();
-	void log(const QString&);
+	void downloadFinished(QNetworkReply*);
 
 private:
-	QScopedPointer<MainWindow> w;
-	Db* db;
+	QNetworkAccessManager mgr ;
 
 };
 
-
-#endif /* DUALWORDPDB_H_ */
+#endif /* SRC_LOADERPDB_H_ */

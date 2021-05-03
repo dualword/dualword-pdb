@@ -49,7 +49,6 @@ Vector3 getGrid_origin(Vector3 GRID, float GRID_SPACING);
 
 Vector3 getMassCenter( AtomContainer& atom_container );
 Vector3 doPreTranslation(AtomContainer&  atom_container );
-void runLigsite(const std::string&);
 
 class grid
 {
