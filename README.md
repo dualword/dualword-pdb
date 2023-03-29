@@ -15,6 +15,7 @@ Third Party Software:
  - BALL License: GNU LGPL
  - LIGSITEcsc License: GNU GPL
  
- ![Screenshot](screenshot1.png)
- ![Screenshot](screenshot2.png)
- 
+<p align="center">
+<img src="screenshot1.png" width="150"/>
+<img src="screenshot2.png" width="150"/>
+</p>
